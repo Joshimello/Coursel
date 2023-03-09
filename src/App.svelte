@@ -1,19 +1,23 @@
 <script lang="ts">
 
-  import Fuse from 'fuse.js'
   import nthuParse from './parser/nthu.ts'
-
-  let value = ''
-  let searchData
-
   const data = nthuParse('nthu11123.json')
 
-  const fuse = new Fuse(data, {
-    // keys: Object.keys(data[0])
-    keys: ['nameEN', 'nameZH', 'teacher.en', 'teacher.zh']
+  import MiniSearch from 'minisearch'
+  const miniSearch = new MiniSearch({
+    fields: ['nameEN', 'nameZH', 'teachersMerged'],
+    storeFields: Object.keys(data[0]),
+    idField: 'ID',
+    searchOptions: {
+      fuzzy: 0.5
+    }
   })
 
-  $: searchData = fuse.search(value, { limit: 20 })
+  miniSearch.addAll(data)
+
+  let value = ''
+  
+  $: searchData = miniSearch.search(value)
 
 </script>
 
@@ -25,7 +29,7 @@
     {#each searchData as course}
 
       <div>
-      {course.item.nameEN}
+      {course.nameEN}
       </div>
 
     {/each}

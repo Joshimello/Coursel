@@ -12,12 +12,16 @@ export default courseData => {
 
     'language': course.授課語言,
 
+    'ID': course.科號,
+
     'departmentID': course.科號.slice(0, 9).trim(),
     'courseID': course.科號.slice(9, 15),
 
     'credits': course.學分數,
     'capacity': course.人限,
     'freshmanCapacity': course.新生保留人數,
+
+    'teachersMerged': course.授課教師,
 
     'teachers': course.授課教師.split('\n').filter(i => i).map(t => ({
         'en': t.split('\t')[1],
