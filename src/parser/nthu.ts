@@ -13,9 +13,9 @@ export default courseData => {
     'language': course.授課語言,
 
     'ID': course.科號,
-
-    'departmentID': course.科號.slice(0, 9).trim(),
+    'semester': course.科號.slice(0, 5),
     'courseID': course.科號.slice(9, 15),
+    'department': course.科號.slice(5, 9).trim(),
 
     'credits': course.學分數,
     'capacity': course.人限,
