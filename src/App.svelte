@@ -1,10 +1,35 @@
+<!-- 
+timetable clear
+clear all filter
+show all dept class when no input
+
+course timetable
+course selection
+course saving
+theme
+
+dynamic dataset
+optional fetch data
+language
+responsive
+
+reviews
+sort by reviews
+ -->
+
 <script lang="ts">
-  import { SearchIcon, XIcon, FilterIcon, MapPinIcon, ClockIcon, AwardIcon, GlobeIcon, UsersIcon, UserPlusIcon, ShieldIcon, InfoIcon, PlusIcon } from 'svelte-feather-icons'
+  import { FilterIcon, MapPinIcon, ClockIcon, AwardIcon, GlobeIcon, UsersIcon, UserPlusIcon, ShieldIcon, InfoIcon, PlusIcon } from 'svelte-feather-icons'
   import '@fontsource/roboto-condensed'
   import '@fontsource/roboto-slab'
 
+  import SearchFilter from './lib/SearchFilter.svelte'
+  import TimetableFilter from './lib/TimetableFilter.svelte'
+  import DepartmentFilter from './lib/DepartmentFilter.svelte'
+
   import nthuParse from './parser/nthu.ts'
   const courseData = nthuParse('nthu11123.json')
+
+  const departmentData = [...new Set(courseData.map(i => i.department))]
 
   import MiniSearch from 'minisearch'
   const miniSearch = new MiniSearch({
@@ -15,81 +40,45 @@
 
   miniSearch.addAll(courseData)
 
-  let value = 'thesis', deptFilter, engFilter, timetableOpen = false
-
-  $: engFilter, console.log(engFilter)
+  let searchFilter = 'thesis', deptFilter, engFilter, timeFilter = []
 
   $: searchData = (
-    isNaN(value[0]) ?
-    miniSearch.search(value, {
+    isNaN(searchFilter[0]) ?
+    miniSearch.search(searchFilter, {
       fields: ['nameEN', 'nameZH', 'teachersMerged'],
       fuzzy: 0.5,
 
-      filter: res => (
-        (deptFilter ? res.department == deptFilter.toUpperCase() : res) &&
-        (engFilter ? res.language == '英' : res)
+      filter: res => (true
+        && (timeFilter.length ? timeFilter.some(i => res.time.includes(i)) : res)
+        && (deptFilter ? res.department == deptFilter.toUpperCase() : res)
+        && (engFilter ? res.language == '英' : res)
       )
     }) :
-    miniSearch.search(value, {
+    miniSearch.search(searchFilter, {
       fields: ['courseID'],
       fuzzy: 0.1,
 
       filter: (res) => deptFilter ? res.department == deptFilter.toUpperCase() : res
     })
-  ).slice(0, 50)
+  ).slice(0, 10)
 
 </script>
   
 <body class="font-serif">
 
   <div class="bg-gray-200 px-48 py-4">
-    <div class="bg-white p-4 my-4 shadow-xl flex items-center gap-4">
-      <SearchIcon size="20" />
-      <input bind:value class="bg-transparent outline-0 flex-1" placeholder="Course Name / Professor Name / ID" />
-      <XIcon size="20" />
-    </div>
+    
+    <SearchFilter bind:searchFilter class="my-4" />
 
-    <div>
-      <span class="block py-1">Filters:</span>
-    </div>
-
+    <span class="block py-1">Filters:</span>
     <div class="flex items-center gap-2">
-      <input bind:value={deptFilter} class="px-4 py-2 bg-white outline-0" placeholder="Department">
-      
+    
+      <DepartmentFilter bind:deptFilter suggestion={departmentData} />
+      <TimetableFilter bind:timeFilter />
+
       <button on:click={() => {engFilter = !engFilter}} class="px-4 py-2 bg-white">
-        {#if engFilter}
-        <span class="mr-2">Offered in English</span>
-        {:else}
-        <span class="mr-2">Offered in All Language</span>
-        {/if}
+        Offered in {engFilter ? 'English' : 'All Language'}
       </button>
-
-        
-      <div>
-        <button on:click={() => {timetableOpen = !timetableOpen}} class="px-4 py-2 bg-white">
-          Timetable
-        </button>
-
-        {#if timetableOpen}
-        <div class="p-4 absolute bg-white shadow-lg gap-1 flex flex-col gap-1">
-          <div class="flex gap-1">
-          {#each [' ', 'M', 'T', 'W', 'R', 'F', 'S'] as day}
-            <div class="w-6 h-6 bg-gray-300 rounded flex items-center justify-center">{day}</div>
-          {/each}
-          </div>
-
-          {#each ['1', '2', '3', '4', 'n', '5', '6', '7', '8', '9', 'a', 'b', 'c'] as time}
-          <div class="flex gap-1">
-            <div class="w-6 h-6 flex bg-gray-300 rounded items-center justify-center">{time}</div>
-            {#each ['M', 'T', 'W', 'R', 'F', 'S'] as day}
-            <button class="w-6 h-6 bg-gray-200 rounded"></button>
-            {/each}
-          </div>
-          {/each}
-        </div>
-        {/if}
-      </div>
-
     </div>
 
       
