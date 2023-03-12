@@ -5,7 +5,6 @@ export default courseData => {
   request.send(null)
 
   return JSON.parse(request.responseText).map(course => ({
-    'selected': false,
 
     'nameEN': course.課程英文名稱,
     'nameZH': course.課程中文名稱,

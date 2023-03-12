@@ -15,8 +15,9 @@
   />
   
   <button
+    class="flex items-center"
     on:click={() => {searchFilter = ''}}>
-    <XIcon size="20" />    
+    <XIcon size="20" />   
   </button>
 
 </div>

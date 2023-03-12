@@ -8,12 +8,13 @@
     UserPlusIcon, 
     ShieldIcon, 
     InfoIcon, 
-    PlusIcon 
+    PlusIcon,
+    MinusIcon
   } from 'svelte-feather-icons'
 
   import '@fontsource/roboto-condensed'
 
-  export let course
+  export let course, selectedCourses
 </script>
 
 <div class="flex flex-col bg-gray-100 shadow-lg rounded-lg p-6 font-sans text-sm text-slate-600 transition duration-400 hover:shadow-2xl">
@@ -84,9 +85,19 @@
     {/if}
   </div>
 
-  <button class="mt-auto p-2 bg-gray-200 rounded flex items-center justify-center transition duration-100 hover:bg-gray-300">
+  {#if !selectedCourses.map(i => i.ID).includes(course.ID)}
+  <button
+    class="mt-auto p-2 bg-gray-200 rounded flex items-center justify-center transition duration-100 hover:bg-gray-300"
+    on:click={() => selectedCourses = [...selectedCourses, course]}>
     <PlusIcon size="20" />
   </button>
+  {:else}
+  <button
+    class="mt-auto p-2 bg-orange-200 rounded flex items-center justify-center transition duration-100 hover:bg-orange-300"
+    on:click={() => selectedCourses = selectedCourses.filter(i => i.ID != course.ID)}>
+    <MinusIcon size="20" />
+  </button>
+  {/if}
 
 </div>
 
