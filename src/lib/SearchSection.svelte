@@ -1,11 +1,11 @@
 <script>
-  import { FilterIcon, SettingsIcon } from 'svelte-feather-icons'
+  import { FilterIcon, SettingsIcon, CalendarIcon } from 'svelte-feather-icons'
 
   import SearchFilter from './SearchFilter.svelte'
   import TimetableFilter from './TimetableFilter.svelte'
   import DepartmentFilter from './DepartmentFilter.svelte'
 
-  export let courseData, searchData
+  export let courseData, searchData, timetableOpen
 
   let searchFilter = '', deptFilter = '', engFilter = false, timeFilter = []
   const departmentData = [...new Set(courseData.map(i => i.department))]
@@ -78,6 +78,12 @@
       class="bg-white py-4 px-6 shadow-xl flex items-center"
       on:click={() => {settingsOpen = !settingsOpen}}>
       <SettingsIcon size="16" />
+    </button>
+
+    <button
+      class="bg-white py-4 px-6 shadow-xl flex items-center"
+      on:click={() => {timetableOpen = !timetableOpen}}>
+      <CalendarIcon size="16" />
     </button>
   </div>
 

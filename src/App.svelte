@@ -1,6 +1,4 @@
 <!-- 
-course timetable
-course selection
 course saving
 theme
 
@@ -27,12 +25,14 @@ sort by reviews
 
   let selectedCourses = courseData.slice(0, 10)
   $: selectedCourses, console.log(selectedCourses)
+
+  let timetableOpen
 </script>
   
 <body class="font-serif">
 
-  <SelectedSection bind:selectedCourses />
-  <SearchSection bind:searchData {courseData} />
+  <SelectedSection bind:selectedCourses bind:timetableOpen />
+  <SearchSection bind:searchData bind:timetableOpen {courseData} />
 
   <div class="px-48">
     <span class="block pb-8">
