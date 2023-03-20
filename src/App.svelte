@@ -23,7 +23,6 @@ sort by reviews
 
   let searchData = []
 
-  let selectedCourses = courseData.slice(0, 10)
   $: selectedCourses, console.log(selectedCourses)
 
   let timetableOpen
