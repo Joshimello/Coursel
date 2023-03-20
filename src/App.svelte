@@ -23,6 +23,8 @@ sort by reviews
 
   let searchData = []
 
+  let selectedCourses = []
+
   $: selectedCourses, console.log(selectedCourses)
 
   let timetableOpen
