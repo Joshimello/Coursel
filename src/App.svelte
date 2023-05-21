@@ -19,7 +19,7 @@ sort by reviews
   import Card from './lib/Card.svelte'
 
   import nthuParse from './parser/nthu.ts'
-  const courseData = nthuParse('nthu11123.json')
+  const courseData = nthuParse('nthu11211.json')
 
   let searchData = []
 
